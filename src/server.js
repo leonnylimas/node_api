@@ -1,7 +1,8 @@
 import http from "node:http"
 
 const server = http.createServer((request, response) => {
-  return response.end("Hello World!")
+  const { method } = request
+  return response.writeHead(200).end("Methedo usado: " + method)
 })
 
 server.listen(3333)
