@@ -1,8 +1,25 @@
 import http from "node:http"
 
-const server = http.createServer((request, response) => {
-  const { method } = request
-  return response.writeHead(200).end("Methedo usado: " + method)
+const server = http.createServer(async(request, response) => {
+  const { method, url } = request
+
+  if (method === "GET" && url === "/products"){
+    return response.end("Lista de produtos!")
+  }
+
+  if (method === "POST" && url === "/products"){
+    const buffers = []
+
+    for await (const chunk of request){
+      buffers.push(chunk)
+    }
+
+    console.log(Buffer.concat(buffers).toString())
+
+    return response.writeHead(201).end("Criando um produto!")
+  }
+
+  return response.writeHead(404).end("Rota não encontrada")
 })
 
 server.listen(3333)
